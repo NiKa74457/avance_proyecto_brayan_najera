@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 2. OBTENER DATOS DEL ATLETA DESDE EL BACKEND
     try {
-        const res = await fetch('http://localhost:3000/api/auth/perfil', {
+        const res = await fetch('http://avance-proyecto-brayan-najera.onrender.com/api/auth/perfil', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -6,7 +6,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     const mensajeApi = document.getElementById('mensaje-api');
 
     try {
-        const respuesta = await fetch('http://localhost:3000/api/auth/login', {
+        const respuesta = await fetch('http://avance-proyecto-brayan-najera.onrender.com/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })

@@ -10,7 +10,7 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
 
     try {
         // 2. Enviamos la petición POST al servidor de Node.js
-        const respuesta = await fetch('http://localhost:3000/api/auth/register', {
+        const respuesta = await fetch('http://avance-proyecto-brayan-najera.onrender.com/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
