@@ -22,17 +22,17 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
 
         // 3. Manejamos la respuesta visualmente
         if (respuesta.ok) {
-            mensajeApi.style.color = "var(--primary)"; // Usamos tu color cian del CSS
+            mensajeApi.style.color = "var(--primary)"; 
             mensajeApi.innerText = "¡Registro exitoso! Ya eres parte de la academia.";
             document.getElementById('contact-form').reset(); // Limpia el formulario
         } else {
-            mensajeApi.style.color = "#ff4444"; // Rojo para errores
+            mensajeApi.style.color = "#ff4444"; 
             mensajeApi.innerText = datos.error || "Error al registrar usuario";
         }
 
     } catch (error) {
         console.error("Error en la conexión:", error);
-        mensajeApi.style.color = "var(--secondary)"; // Morado para errores de conexión
+        mensajeApi.style.color = "var(--secondary)"; // 
         mensajeApi.innerText = "No se pudo conectar con el servidor. ¿Está encendido?";
     }
 });
