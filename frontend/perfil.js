@@ -2,13 +2,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('token');
     const infoDiv = document.getElementById('perfil-info');
 
-    // 1. VERIFICACIÓN DE SESIÓN (Protección de ruta)
+    // 1. VERIFICACIÓN DE SESIÓN
     if (!token) {
+        // Si no hay sesión, mandamos al login
         window.location.href = 'login.html';
         return;
     }
 
-    // 2. OBTENER DATOS DEL ATLETA DESDE EL BACKEND
+    // 2. OBTENER DATOS DEL ATLETA
     try {
         const res = await fetch('https://avance-proyecto-brayan-najera.onrender.com/api/auth/perfil', {
             method: 'GET',
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const datos = await res.json();
 
-        if (res.ok) {
+        if (res.ok && infoDiv) {
             infoDiv.innerHTML = `
                 <div style="margin-top:20px;">
                     <p><strong>NOMBRE:</strong> ${datos.nombre}</p>
@@ -28,25 +29,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <p style="margin-top:20px; color:var(--text-dim);">Estatus: <span style="color:#4ade80;">● Online</span></p>
                 </div>
             `;
+            // Llamamos a la función de la API externa (Cripto/Premios)
+            if (typeof cargarMercadoGamer === 'function') cargarMercadoGamer();
+            
         } else {
+            // Si el token no es válido o expiró
             localStorage.removeItem('token');
             window.location.href = 'login.html';
         }
     } catch (error) {
-        infoDiv.innerHTML = "<p>Error al conectar con la academia.</p>";
+        if (infoDiv) infoDiv.innerHTML = "<p>Error al conectar con la academia.</p>";
     }
 
-    // 3. LÓGICA DINÁMICA (AGREGAR / EDITAR INLINE / ELIMINAR) 
+    // 3. LÓGICA DE JUEGOS (CRUD FRONTEND)
     const btnAgregar = document.getElementById('btn-agregar-juego');
     const inputJuego = document.getElementById('nuevo-juego');
     const listaJuegos = document.getElementById('lista-juegos');
 
-    if (btnAgregar) {
+    if (btnAgregar && listaJuegos) {
         btnAgregar.addEventListener('click', () => {
             const nombreJuego = inputJuego.value.trim();
-            
             if (nombreJuego !== "") {
                 const li = document.createElement('li');
+                li.className = "juego-item"; // Usar clases es más limpio que inline styles
                 li.style = "display:flex; justify-content:space-between; align-items:center; padding:10px; background:#1a1a1a; margin-bottom:8px; border-radius:6px; border: 1px solid #333; border-left:4px solid #4ade80;";
                 
                 li.innerHTML = `
@@ -59,47 +64,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 `;
 
-                const btnEditItem = li.querySelector('.btn-edit-item');
-                const contentArea = li.querySelector('.content-area');
-
-                //  FUNCIÓN EDITAR INLINE
-                btnEditItem.addEventListener('click', function handleEdit() {
-                    const spanActual = contentArea.querySelector('.juego-texto');
-                    
-                    if (this.innerText === "Editar") {
-                        // Cambiar texto por Input
-                        const textoActual = spanActual.innerText.replace('🎮 ', '');
-                        contentArea.innerHTML = `
-                            <input type="text" class="edit-input" value="${textoActual}" 
-                                   style="background:#000; border:1px solid #4ade80; color:white; padding:5px; border-radius:4px; width:85%; outline:none;">
-                        `;
-                        this.innerText = "OK";
-                        this.style.color = "#4ade80";
-                        contentArea.querySelector('.edit-input').focus();
-                    } else {
-                        // Guardar cambios
-                        const nuevoNombre = contentArea.querySelector('.edit-input').value.trim();
-                        if (nuevoNombre) {
-                            contentArea.innerHTML = `<span class="juego-texto" style="color: white;">🎮 ${nuevoNombre}</span>`;
-                            this.innerText = "Editar";
-                            this.style.color = "#4a90e2";
-                        }
-                    }
-                });
-
-                // FUNCIÓN ELIMINAR 
-                li.querySelector('.btn-delete').addEventListener('click', () => li.remove());
-
+                // Configurar eventos de Editar y Eliminar (tu lógica actual es correcta)
+                configurarEventosItem(li);
                 listaJuegos.appendChild(li);
                 inputJuego.value = '';
-                inputJuego.focus();
             }
         });
     }
 });
 
 // 4. CERRAR SESIÓN
-document.getElementById('logout-btn').addEventListener('click', () => {
-    localStorage.removeItem('token');
-    window.location.href = 'index.html';
-});
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        // Redirigir al login para evitar bucles si index.html está protegido
+        window.location.href = 'login.html'; 
+    });
+}
