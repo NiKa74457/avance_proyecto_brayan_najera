@@ -2,14 +2,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('token');
     const infoDiv = document.getElementById('perfil-info');
 
-    // 1. VERIFICACIÓN DE SESIÓN
+    // 1. VERIFICACIÓN DE SESIÓN (Protección)
     if (!token) {
-        // Si no hay sesión, mandamos al login
         window.location.href = 'login.html';
         return;
     }
 
-    // 2. OBTENER DATOS DEL ATLETA
+    // 2. OBTENER DATOS DEL PERFIL
     try {
         const res = await fetch('https://avance-proyecto-brayan-najera.onrender.com/api/auth/perfil', {
             method: 'GET',
@@ -20,52 +19,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const datos = await res.json();
 
-        if (res.ok && infoDiv) {
+        if (res.ok) {
             infoDiv.innerHTML = `
                 <div style="margin-top:20px;">
                     <p><strong>NOMBRE:</strong> ${datos.nombre}</p>
                     <p><strong>EMAIL:</strong> ${datos.email}</p>
-                    <p><strong>ROL:</strong> <span style="color:var(--secondary); text-transform:uppercase;">${datos.rol}</span></p>
-                    <p style="margin-top:20px; color:var(--text-dim);">Estatus: <span style="color:#4ade80;">● Online</span></p>
+                    <p><strong>ROL:</strong> <span style="color:#4ade80; text-transform:uppercase;">${datos.rol}</span></p>
                 </div>
             `;
-            // Llamamos a la función de la API externa (Cripto/Premios)
-            if (typeof cargarMercadoGamer === 'function') cargarMercadoGamer();
-            
         } else {
-            // Si el token no es válido o expiró
             localStorage.removeItem('token');
             window.location.href = 'login.html';
         }
     } catch (error) {
-        if (infoDiv) infoDiv.innerHTML = "<p>Error al conectar con la academia.</p>";
+        infoDiv.innerHTML = "<p>Error al cargar tus datos.</p>";
     }
 
-    // 3. LÓGICA DE JUEGOS (CRUD FRONTEND)
+    // 3. LÓGICA DE JUEGOS (TU CRUD ORIGINAL)
     const btnAgregar = document.getElementById('btn-agregar-juego');
     const inputJuego = document.getElementById('nuevo-juego');
     const listaJuegos = document.getElementById('lista-juegos');
 
-    if (btnAgregar && listaJuegos) {
+    if (btnAgregar) {
         btnAgregar.addEventListener('click', () => {
             const nombreJuego = inputJuego.value.trim();
             if (nombreJuego !== "") {
                 const li = document.createElement('li');
-                li.className = "juego-item"; // Usar clases es más limpio que inline styles
                 li.style = "display:flex; justify-content:space-between; align-items:center; padding:10px; background:#1a1a1a; margin-bottom:8px; border-radius:6px; border: 1px solid #333; border-left:4px solid #4ade80;";
-                
                 li.innerHTML = `
-                    <div class="content-area" style="flex: 1; display: flex; align-items: center;">
-                        <span class="juego-texto" style="color: white;">🎮 ${nombreJuego}</span>
-                    </div>
-                    <div class="actions-area">
-                        <button class="btn-edit-item" style="background:none; border:none; color:#4a90e2; cursor:pointer; margin-right:10px;">Editar</button>
-                        <button class="btn-delete" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-weight:bold;">X</button>
-                    </div>
+                    <span class="juego-texto" style="color: white;">🎮 ${nombreJuego}</span>
+                    <button class="btn-delete" style="background:none; border:none; color:#ff4d4d; cursor:pointer;">X</button>
                 `;
-
-                // Configurar eventos de Editar y Eliminar (tu lógica actual es correcta)
-                configurarEventosItem(li);
+                li.querySelector('.btn-delete').addEventListener('click', () => li.remove());
                 listaJuegos.appendChild(li);
                 inputJuego.value = '';
             }
@@ -73,12 +58,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// 4. CERRAR SESIÓN
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('token');
-        // Redirigir al login para evitar bucles si index.html está protegido
-        window.location.href = 'login.html'; 
-    });
-}
+// 4. BOTÓN DE SALIR (Te regresa al inicio libre)
+document.getElementById('logout-btn').addEventListener('click', () => {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
+});
