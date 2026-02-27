@@ -5,99 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil - Academia eSports</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* Estilos para mantener la estética de tus capturas */
-        body { 
-            background-color: #0f0f0f; 
-            color: white; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0;
-            padding: 0;
-        }
-        .container { 
-            max-width: 500px; 
-            margin: 40px auto; 
-            padding: 20px; 
-            background: #121212; 
-            border-radius: 12px; 
-            border: 1px solid #333; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-        input { 
-            width: 100%; 
-            padding: 10px; 
-            margin-top: 10px; 
-            border-radius: 6px; 
-            border: 1px solid #444; 
-            background: #222; 
-            color: white; 
-            box-sizing: border-box; 
-        }
-        #btn-agregar-juego { 
-            background: #00d2ff; 
-            color: black; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 20px; 
-            font-weight: bold; 
-            margin-top: 10px; 
-            width: 100%; 
-            cursor: pointer;
-        }
-        #btn-agregar-juego:hover { 
-            background: #4ade80; 
-        }
-        #lista-juegos { 
-            list-style: none; 
-            padding: 0; 
-            margin-top: 20px; 
-        }
-        .logout-btn { 
-            background: #ff4d4d; 
-            color: white; 
-            border: none; 
-            padding: 8px 15px; 
-            border-radius: 6px; 
-            margin-top: 20px; 
-            width: 100%; 
-            cursor: pointer;
-        }
-        /* Estilo para las tarjetas de anime */
-        #seccion-anime img {
-            transition: transform 0.3s;
-        }
-        #seccion-anime img:hover {
-            transform: scale(1.05);
-        }
-    </style>
 </head>
 <body>
+    <div style="text-align: right; padding: 20px;">
+        <button onclick="window.location.href='index.html'" style="background: #8b00ff; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px;">Inicio</button>
+        <button id="logout-btn" style="background: #1a1a1a; color: white; border: 1px solid #444; padding: 10px 20px; border-radius: 20px; cursor: pointer;">Cerrar Sesión</button>
+    </div>
 
-    <div class="container">
-        <h2 style="color: #00d2ff; text-align: center; text-transform: uppercase; letter-spacing: 2px;">Panel de Control</h2>
-        <hr style="border: 0.5px solid #333; margin-bottom: 20px;">
-
-        <div id="perfil-info">
-            <p style="color: gray;">Cargando datos del perfil...</p>
+    <div class="container" style="max-width: 600px; margin: 0 auto; background: #121212; border: 1px solid #00d2ff; border-radius: 15px; padding: 30px;">
+        <h1 style="color: #00d2ff; text-align: center; font-size: 2.5rem; margin-bottom: 20px;">Panel de Control</h1>
+        
+        <div id="perfil-info" style="color: white; line-height: 1.6;">
+            <p>Cargando datos del perfil...</p>
         </div>
 
         <hr style="border: 0.5px solid #333; margin: 25px 0;">
 
-        <h3 style="font-size: 1.1rem; color: #4ade80;">🎮 Mis Juegos de Especialización</h3>
+        <h3 style="color: #4ade80;">🎮 Mis Juegos de Especialización</h3>
         
-        <input type="text" id="nuevo-juego" placeholder="Ej: Valorant, LoL, CS2...">
-        <button id="btn-agregar-juego">Añadir</button>
-
-        <div style="margin-top: 20px;">
-            <input type="text" id="filtro-juego" placeholder="🔍 Buscar en mis especialidades...">
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="nuevo-juego" placeholder="Ej: Valorant, LoL, CS2..." style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: white;">
+            <button id="btn-agregar-juego" style="background: #00d2ff; color: black; border: none; padding: 10px 25px; border-radius: 25px; font-weight: bold; cursor: pointer;">Añadir</button>
         </div>
 
-        <ul id="lista-juegos"></ul>
+        <input type="text" id="filtro-juego" placeholder="🔍 Buscar en mis especialidades..." style="width: 100%; padding: 10px; margin-top: 15px; border-radius: 8px; border: 1px solid #333; background: #000; color: #888;">
 
-        <div id="seccion-anime" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 10px;">
-            </div>
+        <ul id="lista-juegos" style="list-style: none; padding: 0; margin-top: 20px;"></ul>
 
-        <button id="logout-btn" class="logout-btn">Cerrar Sesión</button>
+        <div id="seccion-anime" style="margin-top: 30px;"></div>
     </div>
 
     <script src="js/perfil.js"></script>
