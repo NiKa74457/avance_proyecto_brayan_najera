@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // 1. Cargar información del perfil desde la API
     try {
         const res = await fetch('https://avance-proyecto-brayan-najera.onrender.com/api/auth/perfil', {
             method: 'GET',
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (res.ok) {
             infoDiv.innerHTML = `
-                <div style="margin-top:20px;">
+                <div style="margin-top:10px;">
                     <p><strong>NOMBRE:</strong> ${datos.nombre}</p>
                     <p><strong>EMAIL:</strong> ${datos.email}</p>
                     <p><strong>ROL:</strong> <span style="color:#4ade80; text-transform:uppercase;">${datos.rol}</span></p>
@@ -28,10 +29,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.href = 'login.html';
         }
     } catch (error) {
+        console.error("Error:", error);
         infoDiv.innerHTML = "<p>Error al cargar perfil.</p>";
     }
 
-    // Lógica de Juegos (CRUD)
+    // 2. Lógica para AÑADIR JUEGOS (CRUD: Create)
     const btnAgregar = document.getElementById('btn-agregar-juego');
     const inputJuego = document.getElementById('nuevo-juego');
     const listaJuegos = document.getElementById('lista-juegos');
@@ -47,13 +49,33 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <button onclick="this.parentElement.remove()" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-weight:bold;">X</button>
                 `;
                 listaJuegos.appendChild(li);
-                inputJuego.value = '';
+                inputJuego.value = ''; // Limpiar input después de añadir
             }
+        });
+    }
+
+    // 3. NUEVO: Lógica para FILTRAR JUEGOS (Operación de búsqueda)
+    const inputFiltro = document.getElementById('filtro-juego');
+
+    if (inputFiltro) {
+        inputFiltro.addEventListener('input', () => {
+            const texto = inputFiltro.value.toLowerCase();
+            const items = listaJuegos.getElementsByTagName('li');
+
+            Array.from(items).forEach(item => {
+                const nombreItem = item.querySelector('span').innerText.toLowerCase();
+                // Si el texto del filtro está incluido en el nombre del juego, lo mostramos
+                if (nombreItem.includes(texto)) {
+                    item.style.display = "flex";
+                } else {
+                    item.style.display = "none";
+                }
+            });
         });
     }
 });
 
-// Cerrar Sesión
+// 4. Lógica para CERRAR SESIÓN
 document.getElementById('logout-btn').addEventListener('click', () => {
     localStorage.removeItem('token');
     window.location.href = 'index.html';
