@@ -3,34 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil - Academia eSports</title>
+    <title>Perfil - eSports Mentor</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { background-color: #000; color: white; font-family: sans-serif; margin: 0; }
+        .nav-buttons { text-align: right; padding: 20px; }
+        .btn-inicio { background: #8b00ff; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px; font-size: 1rem; }
+        .btn-logout { background: #1a1a1a; color: white; border: 1px solid #444; padding: 10px 25px; border-radius: 20px; cursor: pointer; }
+        
+        .main-card { 
+            max-width: 600px; 
+            margin: 50px auto; 
+            background: #121212; 
+            border: 2px solid #00d2ff; 
+            border-radius: 20px; 
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+        }
+        h1 { color: #00d2ff; text-align: center; font-size: 3rem; margin-top: 0; }
+        .info-row { margin: 10px 0; font-size: 1.1rem; }
+        .rol-tag { color: #4ade80; font-weight: bold; }
+        
+        .input-group { display: flex; gap: 10px; margin-top: 20px; }
+        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; flex: 1; }
+        .btn-add { background: #00d2ff; color: black; border: none; padding: 0 30px; border-radius: 25px; font-weight: bold; cursor: pointer; }
+        
+        #lista-juegos { list-style: none; padding: 0; margin-top: 20px; }
+    </style>
 </head>
 <body>
-    <div style="text-align: right; padding: 20px;">
-        <button onclick="window.location.href='index.html'" style="background: #8b00ff; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px;">Inicio</button>
-        <button id="logout-btn" style="background: #1a1a1a; color: white; border: 1px solid #444; padding: 10px 20px; border-radius: 20px; cursor: pointer;">Cerrar Sesión</button>
+
+    <div class="nav-buttons">
+        <button class="btn-inicio" onclick="window.location.href='index.html'">Inicio</button>
+        <button id="logout-btn" class="btn-logout">Cerrar Sesión</button>
     </div>
 
-    <div class="container" style="max-width: 600px; margin: 0 auto; background: #121212; border: 1px solid #00d2ff; border-radius: 15px; padding: 30px;">
-        <h1 style="color: #00d2ff; text-align: center; font-size: 2.5rem; margin-bottom: 20px;">Panel de Control</h1>
+    <div class="main-card">
+        <h1>Panel de Control</h1>
         
-        <div id="perfil-info" style="color: white; line-height: 1.6;">
+        <div id="perfil-info">
             <p>Cargando datos del perfil...</p>
         </div>
 
-        <hr style="border: 0.5px solid #333; margin: 25px 0;">
+        <hr style="border: 0.5px solid #333; margin: 30px 0;">
 
         <h3 style="color: #4ade80;">🎮 Mis Juegos de Especialización</h3>
         
-        <div style="display: flex; gap: 10px;">
-            <input type="text" id="nuevo-juego" placeholder="Ej: Valorant, LoL, CS2..." style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: white;">
-            <button id="btn-agregar-juego" style="background: #00d2ff; color: black; border: none; padding: 10px 25px; border-radius: 25px; font-weight: bold; cursor: pointer;">Añadir</button>
+        <div class="input-group">
+            <input type="text" id="nuevo-juego" placeholder="Ej: Valorant, LoL, CS2...">
+            <button id="btn-agregar-juego" class="btn-add">Añadir</button>
         </div>
 
-        <input type="text" id="filtro-juego" placeholder="🔍 Buscar en mis especialidades..." style="width: 100%; padding: 10px; margin-top: 15px; border-radius: 8px; border: 1px solid #333; background: #000; color: #888;">
+        <input type="text" id="filtro-juego" placeholder="🔍 Buscar en mis especialidades..." style="width: 100%; margin-top: 15px;">
 
-        <ul id="lista-juegos" style="list-style: none; padding: 0; margin-top: 20px;"></ul>
+        <ul id="lista-juegos"></ul>
     </div>
 
     <script src="js/perfil.js"></script>
