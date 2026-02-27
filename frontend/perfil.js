@@ -3,13 +3,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const infoDiv = document.getElementById('perfil-info');
     const RAWG_API_KEY = '5baabed7dc0a48b5a514f8ce881211f7';
 
-    // Redirigir si no hay token
     if (!token) {
         window.location.href = 'login.html';
         return;
     }
 
-    // 1. CARGAR DATOS DEL USUARIO (Corregido para tu backend)
+    // 1. CARGAR DATOS DEL USUARIO
     try {
         const response = await fetch('https://avance-proyecto-brayan-najera.onrender.com/api/auth/perfil', {
             method: 'GET',
@@ -28,18 +27,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.href = 'login.html';
         }
     } catch (error) {
-        console.error("Error al cargar perfil:", error);
+        console.error("Error:", error);
         infoDiv.innerHTML = "<p style='color:red;'>Error al conectar con el servidor.</p>";
     }
 
-    // 2. AÑADIR JUEGO (Con RAWG)
+    // 2. BOTÓN AÑADIR JUEGO
     const btnAdd = document.getElementById('btn-agregar-juego');
-    const inputJuego = document.getElementById('nuevo-juego');
-    const listaJuegos = document.getElementById('lista-juegos');
-
     if (btnAdd) {
         btnAdd.addEventListener('click', async () => {
-            const nombre = inputJuego.value.trim();
+            const input = document.getElementById('nuevo-juego');
+            const nombre = input.value.trim();
             if (!nombre) return;
 
             let img = 'https://via.placeholder.com/50';
@@ -54,32 +51,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             li.innerHTML = `
                 <div style="display:flex; align-items:center; gap:15px;">
                     <img src="${img}" style="width:45px; height:45px; border-radius:5px; object-fit:cover;">
-                    <span style="font-weight:bold;">${nombre}</span>
+                    <span style="font-weight:bold; color:white;">${nombre}</span>
                 </div>
                 <button onclick="this.parentElement.remove()" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:1.5rem;">&times;</button>
             `;
-            listaJuegos.appendChild(li);
-            inputJuego.value = '';
+            document.getElementById('lista-juegos').appendChild(li);
+            input.value = '';
         });
     }
 
-    // 3. CERRAR SESIÓN
-    document.getElementById('logout-btn').addEventListener('click', () => {
-        localStorage.removeItem('token');
-        window.location.href = 'index.html';
-    });
-
-    // 4. API ANIME (Opcional, cargada al final)
-    async function cargarAnime() {
-        try {
-            const res = await fetch('https://api.jikan.moe/v4/top/anime?limit=3');
-            const data = await res.json();
-            let html = '<p style="color:#00d2ff; font-size:0.8rem; font-weight:bold;">RECOMENDACIONES ANIME</p><div style="display:flex; gap:10px;">';
-            data.data.forEach(a => {
-                html += `<div style="flex:1; text-align:center;"><img src="${a.images.jpg.image_url}" style="width:100%; height:70px; object-fit:cover; border-radius:5px;"><p style="font-size:9px; margin-top:5px;">${a.title}</p></div>`;
-            });
-            document.getElementById('seccion-anime').innerHTML = html + '</div>';
-        } catch (e) { console.log("Anime no cargado"); }
+    // 3. CERRAR SESIÓN (Botón Superior)
+    const btnLogout = document.getElementById('logout-btn');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
+        });
     }
-    cargarAnime();
 });
