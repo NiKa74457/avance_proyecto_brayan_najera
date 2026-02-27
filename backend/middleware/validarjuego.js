@@ -1,6 +1,5 @@
-// backend/middleware/validarJuego.js
 
-const validarJuego = (req, res, next) => {
+const validarjuego = (req, res, next) => {
     const { nombre } = req.body;
 
     // Validación: que el nombre exista y no sean solo espacios
@@ -19,4 +18,4 @@ const validarJuego = (req, res, next) => {
     next();
 };
 
-module.exports = validarJuego;
+module.exports = validarjuego;

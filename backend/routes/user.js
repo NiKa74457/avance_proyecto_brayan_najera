@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/authMiddleware'); // El que protege la ruta
 const User = require('../models/User');
-const validarJuego = require('../middleware/validarJuego'); // El nuevo validador que creamos
+const validarjuego = require('../middleware/validarjuego'); // El nuevo validador que creamos
 
 // 1. OBTENER PERFIL
 // Actualizado para usar 'next' y conectar con tu errorMiddleware
@@ -21,7 +21,7 @@ router.get('/perfil', auth, async (req, res, next) => {
 
 // 2. AÑADIR JUEGOS (Ruta con Validación Adicional)
 // Cumple con: Middleware de validación y robustez de la API
-router.post('/juegos', auth, validarJuego, async (req, res, next) => {
+router.post('/juegos', auth, validarjuego, async (req, res, next) => {
     try {
         const { nombre } = req.body;
         const usuario = await User.findById(req.user.id);
