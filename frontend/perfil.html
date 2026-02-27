@@ -7,56 +7,127 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         body { background-color: #000; color: white; font-family: sans-serif; margin: 0; }
-        .nav-buttons { text-align: right; padding: 20px; }
-        .btn-inicio { background: #8b00ff; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px; font-size: 1rem; }
+        /* Botones superiores */
+        .header-nav { text-align: right; padding: 20px 40px; }
+        .btn-inicio { background: #8b00ff; color: white; border: none; padding: 10px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 15px; }
         .btn-logout { background: #1a1a1a; color: white; border: 1px solid #444; padding: 10px 25px; border-radius: 20px; cursor: pointer; }
         
-        .main-card { 
+        /* Tarjeta Principal con borde neón */
+        .panel-container { 
             max-width: 600px; 
-            margin: 50px auto; 
+            margin: 40px auto; 
             background: #121212; 
             border: 2px solid #00d2ff; 
-            border-radius: 20px; 
+            border-radius: 25px; 
             padding: 40px;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
         }
-        h1 { color: #00d2ff; text-align: center; font-size: 3rem; margin-top: 0; }
-        .info-row { margin: 10px 0; font-size: 1.1rem; }
-        .rol-tag { color: #4ade80; font-weight: bold; }
+        h1 { color: #00d2ff; text-align: center; font-size: 3rem; margin-top: 0; letter-spacing: 1px; }
         
-        .input-group { display: flex; gap: 10px; margin-top: 20px; }
-        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; flex: 1; }
-        .btn-add { background: #00d2ff; color: black; border: none; padding: 0 30px; border-radius: 25px; font-weight: bold; cursor: pointer; }
+        /* Inputs y Botones internos */
+        .input-box { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 10px; width: 100%; box-sizing: border-box; }
+        .btn-añadir { background: #00d2ff; color: black; border: none; padding: 10px 35px; border-radius: 25px; font-weight: bold; cursor: pointer; }
         
         #lista-juegos { list-style: none; padding: 0; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="nav-buttons">
+    <div class="header-nav">
         <button class="btn-inicio" onclick="window.location.href='index.html'">Inicio</button>
         <button id="logout-btn" class="btn-logout">Cerrar Sesión</button>
     </div>
 
-    <div class="main-card">
+    <div class="panel-container">
         <h1>Panel de Control</h1>
         
-        <div id="perfil-info">
+        <div id="perfil-info" style="font-size: 1.1rem; line-height: 1.8;">
             <p>Cargando datos del perfil...</p>
         </div>
 
         <hr style="border: 0.5px solid #333; margin: 30px 0;">
 
-        <h3 style="color: #4ade80;">🎮 Mis Juegos de Especialización</h3>
+        <h3 style="color: #4ade80; display: flex; align-items: center; gap: 10px;">
+            🎮 Mis Juegos de Especialización
+        </h3>
         
-        <div class="input-group">
-            <input type="text" id="nuevo-juego" placeholder="Ej: Valorant, LoL, CS2...">
-            <button id="btn-agregar-juego" class="btn-add">Añadir</button>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <input type="text" id="nuevo-juego" class="input-box" placeholder="Ej: Valorant, LoL, CS2...">
+            <button id="btn-agregar-juego" class="btn-añadir">Añadir</button>
         </div>
 
-        <input type="text" id="filtro-juego" placeholder="🔍 Buscar en mis especialidades..." style="width: 100%; margin-top: 15px;">
+        <input type="text" id="filtro-juego" class="input-box" placeholder="🔍 Buscar en mis especialidades..." style="background: #000;">
 
         <ul id="lista-juegos"></ul>
+
+        <div id="seccion-anime" style="margin-top: 30px;"></div>
+    </div>
+
+    <script src="js/perfil.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - eSports Mentor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { background-color: #000; color: white; font-family: sans-serif; margin: 0; }
+        /* Botones superiores */
+        .header-nav { text-align: right; padding: 20px 40px; }
+        .btn-inicio { background: #8b00ff; color: white; border: none; padding: 10px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 15px; }
+        .btn-logout { background: #1a1a1a; color: white; border: 1px solid #444; padding: 10px 25px; border-radius: 20px; cursor: pointer; }
+        
+        /* Tarjeta Principal con borde neón */
+        .panel-container { 
+            max-width: 600px; 
+            margin: 40px auto; 
+            background: #121212; 
+            border: 2px solid #00d2ff; 
+            border-radius: 25px; 
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+        }
+        h1 { color: #00d2ff; text-align: center; font-size: 3rem; margin-top: 0; letter-spacing: 1px; }
+        
+        /* Inputs y Botones internos */
+        .input-box { background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 10px; width: 100%; box-sizing: border-box; }
+        .btn-añadir { background: #00d2ff; color: black; border: none; padding: 10px 35px; border-radius: 25px; font-weight: bold; cursor: pointer; }
+        
+        #lista-juegos { list-style: none; padding: 0; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-nav">
+        <button class="btn-inicio" onclick="window.location.href='index.html'">Inicio</button>
+        <button id="logout-btn" class="btn-logout">Cerrar Sesión</button>
+    </div>
+
+    <div class="panel-container">
+        <h1>Panel de Control</h1>
+        
+        <div id="perfil-info" style="font-size: 1.1rem; line-height: 1.8;">
+            <p>Cargando datos del perfil...</p>
+        </div>
+
+        <hr style="border: 0.5px solid #333; margin: 30px 0;">
+
+        <h3 style="color: #4ade80; display: flex; align-items: center; gap: 10px;">
+            🎮 Mis Juegos de Especialización
+        </h3>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <input type="text" id="nuevo-juego" class="input-box" placeholder="Ej: Valorant, LoL, CS2...">
+            <button id="btn-agregar-juego" class="btn-añadir">Añadir</button>
+        </div>
+
+        <input type="text" id="filtro-juego" class="input-box" placeholder="🔍 Buscar en mis especialidades..." style="background: #000;">
+
+        <ul id="lista-juegos"></ul>
+
+        <div id="seccion-anime" style="margin-top: 30px;"></div>
     </div>
 
     <script src="js/perfil.js"></script>

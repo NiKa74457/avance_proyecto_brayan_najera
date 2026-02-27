@@ -1,30 +1,27 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('token');
     const infoDiv = document.getElementById('perfil-info');
-    const RAWG_API_KEY = '5baabed7dc0a48b5a514f8ce881211f7'; // Tu API Key integrada
+    const RAWG_API_KEY = '5baabed7dc0a48b5a514f8ce881211f7';
 
+    // Redirigir si no hay token
     if (!token) {
         window.location.href = 'login.html';
         return;
     }
 
-    // 1. Cargar información del perfil (Debugging incluido)
+    // 1. CARGAR DATOS DEL USUARIO (Corregido para tu backend)
     try {
-        const res = await fetch('https://avance-proyecto-brayan-najera.onrender.com/api/auth/perfil', {
+        const response = await fetch('https://avance-proyecto-brayan-najera.onrender.com/api/auth/perfil', {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${token}` }
         });
-
-        const datos = await res.json();
-        console.log("Datos del perfil recibidos:", datos); // Debugging
-
-        if (res.ok) {
+        const data = await response.json();
+        
+        if (response.ok) {
             infoDiv.innerHTML = `
-                <div style="margin-top:10px;">
-                    <p><strong>NOMBRE:</strong> ${datos.nombre}</p>
-                    <p><strong>EMAIL:</strong> ${datos.email}</p>
-                    <p><strong>ROL:</strong> <span style="color:#4ade80; text-transform:uppercase;">${datos.rol}</span></p>
-                </div>
+                <p><strong>NOMBRE:</strong> ${data.nombre}</p>
+                <p><strong>EMAIL:</strong> ${data.email}</p>
+                <p><strong>ROL:</strong> <span style="color:#4ade80; font-weight:bold;">${data.rol.toUpperCase()}</span></p>
             `;
         } else {
             localStorage.removeItem('token');
@@ -32,68 +29,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } catch (error) {
         console.error("Error al cargar perfil:", error);
-        infoDiv.innerHTML = "<p>Error al cargar perfil.</p>";
+        infoDiv.innerHTML = "<p style='color:red;'>Error al conectar con el servidor.</p>";
     }
 
-    // 2. Lógica para AÑADIR JUEGOS con API EXTERNA (RAWG)
-    const btnAgregar = document.getElementById('btn-agregar-juego');
+    // 2. AÑADIR JUEGO (Con RAWG)
+    const btnAdd = document.getElementById('btn-agregar-juego');
     const inputJuego = document.getElementById('nuevo-juego');
     const listaJuegos = document.getElementById('lista-juegos');
 
-    if (btnAgregar) {
-        btnAgregar.addEventListener('click', async () => {
-            const nombreJuego = inputJuego.value.trim();
-            
-            if (nombreJuego !== "") {
-                let imagenUrl = 'https://via.placeholder.com/50'; // Imagen de respaldo
+    if (btnAdd) {
+        btnAdd.addEventListener('click', async () => {
+            const nombre = inputJuego.value.trim();
+            if (!nombre) return;
 
-                try {
-                    // Consulta asíncrona a la API externa
-                    const response = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(nombreJuego)}`);
-                    const data = await response.json();
-                    
-                    if (data.results && data.results.length > 0) {
-                        imagenUrl = data.results[0].background_image;
-                    }
-                } catch (err) {
-                    console.error("Fallo en la conexión con RAWG:", err);
-                }
+            let img = 'https://via.placeholder.com/50';
+            try {
+                const res = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${nombre}`);
+                const d = await res.json();
+                if (d.results && d.results.length > 0) img = d.results[0].background_image;
+            } catch (e) { console.error(e); }
 
-                const li = document.createElement('li');
-                li.style = "display:flex; justify-content:space-between; align-items:center; padding:10px; background:#1a1a1a; margin-bottom:8px; border-radius:6px; border: 1px solid #333; border-left:4px solid #4ade80;";
-                
-                li.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <img src="${imagenUrl}" alt="${nombreJuego}" style="width:50px; height:50px; border-radius:4px; object-fit:cover; border:1px solid #444;">
-                        <span style="color: white; font-weight: bold;">${nombreJuego}</span>
-                    </div>
-                    <button onclick="this.parentElement.remove()" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:1.2rem;">&times;</button>
-                `;
-                
-                listaJuegos.appendChild(li);
-                inputJuego.value = ''; 
-            }
+            const li = document.createElement('li');
+            li.style = "background:#1a1a1a; padding:15px; margin-bottom:10px; border-radius:12px; border:1px solid #333; display:flex; align-items:center; justify-content:space-between; border-left: 4px solid #00d2ff;";
+            li.innerHTML = `
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <img src="${img}" style="width:45px; height:45px; border-radius:5px; object-fit:cover;">
+                    <span style="font-weight:bold;">${nombre}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:1.5rem;">&times;</button>
+            `;
+            listaJuegos.appendChild(li);
+            inputJuego.value = '';
         });
     }
 
-    // 3. Lógica para FILTRAR JUEGOS (CRUD: Read con filtros)
-    const inputFiltro = document.getElementById('filtro-juego');
+    // 3. CERRAR SESIÓN
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+    });
 
-    if (inputFiltro) {
-        inputFiltro.addEventListener('input', () => {
-            const texto = inputFiltro.value.toLowerCase();
-            const items = listaJuegos.getElementsByTagName('li');
-
-            Array.from(items).forEach(item => {
-                const nombreItem = item.querySelector('span').innerText.toLowerCase();
-                item.style.display = nombreItem.includes(texto) ? "flex" : "none";
+    // 4. API ANIME (Opcional, cargada al final)
+    async function cargarAnime() {
+        try {
+            const res = await fetch('https://api.jikan.moe/v4/top/anime?limit=3');
+            const data = await res.json();
+            let html = '<p style="color:#00d2ff; font-size:0.8rem; font-weight:bold;">RECOMENDACIONES ANIME</p><div style="display:flex; gap:10px;">';
+            data.data.forEach(a => {
+                html += `<div style="flex:1; text-align:center;"><img src="${a.images.jpg.image_url}" style="width:100%; height:70px; object-fit:cover; border-radius:5px;"><p style="font-size:9px; margin-top:5px;">${a.title}</p></div>`;
             });
-        });
+            document.getElementById('seccion-anime').innerHTML = html + '</div>';
+        } catch (e) { console.log("Anime no cargado"); }
     }
-});
-
-// 4. Cerrar Sesión
-document.getElementById('logout-btn').addEventListener('click', () => {
-    localStorage.removeItem('token');
-    window.location.href = 'index.html';
+    cargarAnime();
 });
