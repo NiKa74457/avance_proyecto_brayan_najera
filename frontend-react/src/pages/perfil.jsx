@@ -46,12 +46,22 @@ const Perfil = () => {
     const agregarJuego = async () => {
         if (nuevoJuego.trim() === "") return;
         let imagenUrl = 'https://via.placeholder.com/50';
+        let plataformas = 'No especificada'; // Variable nueva para las consolas
 
         try {
             const response = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(nuevoJuego)}`);
             const data = await response.json();
             if (data.results && data.results.length > 0) {
-                imagenUrl = data.results[0].background_image;
+                const juegoInfo = data.results[0];
+                imagenUrl = juegoInfo.background_image;
+                
+                // Extraemos los nombres de las plataformas (ej: PC, PlayStation 5)
+                if (juegoInfo.platforms) {
+                    plataformas = juegoInfo.platforms
+                        .map(p => p.platform.name)
+                        .slice(0, 3) // Limitamos a 3 para mantener el orden
+                        .join(', ');
+                }
             }
         } catch (err) {
             console.error("Fallo en la conexión con RAWG:", err);
@@ -60,7 +70,8 @@ const Perfil = () => {
         const juegoNuevo = {
             id: Date.now(),
             nombre: nuevoJuego,
-            imagen: imagenUrl
+            imagen: imagenUrl,
+            plataformas: plataformas // Agregado al objeto del juego
         };
 
         setJuegos([...juegos, juegoNuevo]);
@@ -129,8 +140,11 @@ const Perfil = () => {
                             {juegosFiltrados.map(juego => (
                                 <li key={juego.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: '#1a1a1a', marginBottom: '8px', borderRadius: '6px', borderLeft: '4px solid #4ade80' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                        <img src={juego.imagen} alt={juego.nombre} style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover' }} />
-                                        <span style={{ fontWeight: 'bold' }}>{juego.nombre}</span>
+                                        <img src={juego.imagen} alt={juego.nombre} style={{ width: '45px', height: '45px', borderRadius: '4px', objectFit: 'cover' }} />
+                                        <div>
+                                            <span style={{ fontWeight: 'bold', display: 'block' }}>{juego.nombre}</span>
+                                            <small style={{ color: '#888', fontSize: '0.75rem' }}>{juego.plataformas}</small>
+                                        </div>
                                     </div>
                                     <button onClick={() => eliminarJuego(juego.id)} style={{ background: 'none', border: 'none', color: '#ff4d4d', cursor: 'pointer', fontSize: '1.2rem' }}>&times;</button>
                                 </li>
