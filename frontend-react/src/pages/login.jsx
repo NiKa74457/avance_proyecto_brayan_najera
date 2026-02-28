@@ -14,7 +14,6 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            // Tu URL y lógica de fetch original sin cambios
             const respuesta = await fetch('https://avance-proyecto-brayan-najera.onrender.com/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
