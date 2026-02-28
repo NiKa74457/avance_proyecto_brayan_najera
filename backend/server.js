@@ -30,10 +30,7 @@ app.get('/', (req, res) => {
 });
 
 // 4. Middleware de manejo de errores personalizado (Ajustado)
-// Este bloque ahora detecta si el error es una validación fallida (400)
 app.use((err, req, res, next) => {
-    // Si res.statusCode ya fue marcado (ej. por validarjuego), lo usamos. 
-    // Si no, usamos 500 para errores internos.
     const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
     
     console.error(`[Error]: ${err.message}`); 
@@ -51,3 +48,6 @@ app.listen(PORT, () => {
     console.log(`🚀 Servidor activo en http://localhost:${PORT}`);
     console.log(`🎮 Academia de eSports lista para el despliegue preliminar`);
 });
+
+// Línea agregada para habilitar las pruebas de robustez y seguridad con Jest
+module.exports = app;
